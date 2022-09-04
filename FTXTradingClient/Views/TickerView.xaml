@@ -1,0 +1,682 @@
+﻿<Window x:Class="FTXTradingClient.Views.TickerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:vm="clr-namespace:FTXTradingClient.ViewModel"
+        xmlns:converters="clr-namespace:FTXTradingClient.ViewModel.ValueConverters"
+        xmlns:local="clr-namespace:FTXTradingClient.Views"
+        xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:custom="clr-namespace:FTXTradingClient"
+        mc:Ignorable="d"
+        Title="FTX Trading Client" Height="850" Width="1200"
+        x:Name="MainWindow"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseDown="Window_MouseDown"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#282D33"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#282D33"/>
+        <system:Double x:Key="CalculatorElementsWidth">100</system:Double>
+        <system:Double x:Key="CalculatorElementsHeight">25</system:Double>
+        <system:Double x:Key="CalculatorSetupElementsWidth">185</system:Double>
+        <vm:TickerViewModel x:Key="vm"/>
+        <converters:BoolToForegroundConverter x:Key="BoolToForeground" HigherPrice="Green" LowerPrice="Red" SamePrice="White"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <vm:TickerViewModel/>
+    </Window.DataContext>
+
+    <Border 
+        Background="#3A4149"
+        BorderBrush="#3A4149"
+        BorderThickness="5"
+        CornerRadius="8,8,0,8">
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <custom:Modal 
+                Panel.ZIndex="10" 
+                x:Name="Modal" 
+                Height="300" 
+                Width="300" 
+                Margin="238,165,332,254"
+                Background="{StaticResource BackgroundColor}" Grid.Column="2" Grid.Row="3">
+                <Border CornerRadius="8,8,0,8">
+                    <Grid>
+
+                        <TextBlock Text="Order Overview" HorizontalAlignment="Center" Margin="103,-1,89,46" FontSize="15" FontWeight="Medium"/>
+                        <StackPanel Height="300" Margin="10, 25, 0, 0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="70"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Column="0" Grid.Row="0">
+                                    <Label Content="Trigger price"/>
+                                    <TextBlock
+                                        Margin="5, 0, 0, 0"
+                                        Text="{Binding InitialEntry, UpdateSourceTrigger=PropertyChanged}" 
+                                        FontSize="13"
+                                        Foreground="WhiteSmoke"
+                                        FontWeight="DemiBold"
+                                        />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0" Grid.Column="1">
+                                    <Label Content="Order type"/>
+                                    <ComboBox 
+                                        ItemsSource="{Binding CalculatorComboBoxes.OrderType}"
+                                        SelectedItem="{Binding CalculatorComboBoxes.OrderType[0]}"
+                                        Width="120"
+                                        Margin="0, 0, 20, 0">
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0">
+                                    <Label Content="Limit price"/>
+                                    <TextBlock
+                                        Margin="5, 0, 0, 0"
+                                        Text="{Binding Limit, UpdateSourceTrigger=PropertyChanged}" 
+                                        FontSize="13"
+                                        Foreground="WhiteSmoke"
+                                        FontWeight="DemiBold"
+                                        />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="1">
+                                    <Label Content="Reduce Only" />
+                                    <CheckBox Margin="5, 0, 0, 0"/>
+
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2">
+                                    <Label Content="Stop Price" />
+                                    <TextBlock
+                                        Margin="5, 0, 0, 0"
+                                        Text="{Binding InitialStop, UpdateSourceTrigger=PropertyChanged}" 
+                                        FontSize="13"
+                                        Foreground="WhiteSmoke"
+                                        FontWeight="DemiBold"
+                                        />
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Row="2" Grid.Column="1">
+                                    <Label Content="Retry until filled"/>
+                                    <CheckBox Margin="5, 0, 0, 0"/>
+                                </StackPanel>
+                                
+
+                                <StackPanel Grid.Row="3" Grid.Column="0">
+                                    <Label Content="Amount"/>
+                                    <TextBlock
+                                        Margin="5, 0, 0, 0"
+                                        Text="{Binding EntryQuantity, UpdateSourceTrigger=PropertyChanged}" 
+                                        FontSize="13"
+                                        Foreground="WhiteSmoke"
+                                        FontWeight="DemiBold"
+                                        />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="3" Grid.Column="1">
+                                    <Label Content="Amount in USD"/>
+                                    <TextBlock
+                                        Margin="5, 0, 0, 0"
+                                        Text="{Binding EntrySize, UpdateSourceTrigger=PropertyChanged}" 
+                                        FontSize="13"
+                                        Foreground="WhiteSmoke"
+                                        FontWeight="DemiBold"
+                                        />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0, 15, 25, 0">
+                                    <Button 
+                                        Content="{Binding BuySellButtonContent}"
+                                        Command="{Binding RaiseOrdersCommand}"
+                                        Margin="0, 0, 0, 0"/>
+                                    <Button 
+                                        Margin="0, 2, 0, 0"
+                                        Command="{Binding CloseRaiseOrdersModalCommand}" CommandParameter="{Binding ElementName=Modal}">
+                                        Cancel
+                                    </Button>
+
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </custom:Modal>
+
+            <TextBox 
+                Grid.Row="2" 
+                Grid.Column="1"
+                Margin="0, 0, 2, 0"
+                Padding="5"
+                Text="{Binding TickersFilter, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <ListView Grid.Row="3"
+                  Grid.Column="1"
+                  Margin="0, 0, 2, 0"
+                  Background="{StaticResource BackgroundColor}"
+                  BorderThickness="2"
+                  BorderBrush="{StaticResource BorderBrush}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ItemsSource ="{Binding TickersCollectionView}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                        Name="SPListView" Height="25">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction
+                                            Command="{Binding DataContext.MouseLeftButtonDownCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                            CommandParameter="{Binding ElementName=SPListView}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                                <TextBlock
+                                    Width="130" 
+                                    Text="{Binding Market}"
+                                    Foreground="WhiteSmoke"
+                                    />
+                                <TextBlock 
+                                    Width="110" 
+                                    Text="{Binding Price}"
+                                    Foreground="{Binding LastPrice, Converter={StaticResource BoolToForeground}}"
+                                    />
+                            </StackPanel>
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+            </ListView>
+            <WrapPanel Height="35" Grid.Row="2" Grid.Column="3">
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">5M</Button>
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">15M</Button>
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">1H</Button>
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">4H</Button>
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">D</Button>
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">W</Button>
+                <Button Width="45" Command="{Binding ChangeTimeFrameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">M</Button>
+            </WrapPanel>
+
+            <StackPanel 
+                Grid.Row="3"
+                Grid.Column="3">
+
+                <fc:CandleChart
+                    xmlns:fc="clr-namespace:FancyCandles;assembly=FancyCandles"
+                    Name="CandlesChart"
+                    VerticalAlignment="Top"
+                    Height="400"
+                    CandlesSource="{Binding Candles}"
+                    LegendText="{Binding ChartInfo}"
+                    LegendFontSize="13"
+                    LegendVerticalAlignment="Top"
+                    LegendForeground="WhiteSmoke"
+                    LegendMargin="10"
+                    ChartAreaBackground="#282D33"
+                    ScrollBarBackground="#282D33"
+                    ChartAreaBorderColor="#3A4149"
+                    CurrentPriceLabelForeground="#282D33"
+                    TimeAxisTickLabelFontSize="11"
+                    PriceAxisTickLabelFontSize="11"
+                    AxisTickColor="WhiteSmoke"
+                    BorderThickness="1"
+                    CurrentPriceLabelBackground="AliceBlue"
+                    IsVolumePanelVisible="False"
+                    CrossLinesBrush="WhiteSmoke"
+                />
+                <TabControl
+                    VerticalAlignment="Bottom"
+                    Background="{StaticResource BackgroundColor}"
+                    BorderBrush="{StaticResource BorderBrush}">
+                    <TabItem Header="Positions">
+
+                    </TabItem>
+
+                    <TabItem Header="Open Orders">
+
+                    </TabItem>
+
+                    <TabItem Header="Active Trades">
+
+                    </TabItem>
+
+                    <TabItem Header="Calculator">
+                        <WrapPanel MinWidth="500">
+                            <StackPanel Margin="2, 0, 0, 0">
+                                <WrapPanel>
+                                    <Popup 
+                                        MinWidth="{StaticResource CalculatorElementsWidth}"
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        ToolTip="Hi"
+                                        IsOpen="{Binding IsOpenPopUp}">
+                                        <TextBlock Foreground="Red" FontSize="13" Text="Stop must be greater than Entry for Short"/>
+                                    </Popup>
+                                    <WrapPanel Margin="0, 2, 0, 0" >
+                                        <TextBlock
+                                            Margin="0, 0, 3, 0"
+                                            Text="USD Risk Value: "/>
+                                        <TextBlock
+                                            Padding="5, 0, 0, 0"
+                                            Width="{StaticResource CalculatorElementsWidth}"
+                                            Height="{StaticResource CalculatorElementsHeight}"
+                                            Text="{Binding AmountRiskInDollars}"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel Margin="10, 2, 0, 0">
+                                        <TextBlock
+                                             Margin="0, 0, 3, 0"
+                                             Text="Pair: "/>
+                                        <TextBox
+                                            Width="{StaticResource CalculatorElementsWidth}"
+                                            Height="{StaticResource CalculatorElementsHeight}"
+                                            Text="{Binding Symbol}"
+                                            Padding="3"
+                                            TextAlignment="Center"/>
+                                </WrapPanel>
+
+                        </WrapPanel>
+                                <WrapPanel Margin="0, 10, 0, 2">
+
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Strategy"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Short/Long"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Margin/Spot"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Decimal Places"/>
+
+                                    <Label/>
+
+                                </WrapPanel>
+
+                                <WrapPanel>
+
+                                    <ComboBox
+                                        Width="{StaticResource CalculatorElementsWidth}"
+                                        ItemsSource="{Binding CalculatorComboBoxes.Strategy}"
+                                        SelectedItem="{Binding SelectedStrategy}">
+                                    </ComboBox>
+                                    <Label/>
+
+                                    <ComboBox
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                        ItemsSource="{Binding CalculatorComboBoxes.ShortLong}"
+                                        SelectedItem="{Binding SelectedShortSlong}">
+
+                                    </ComboBox>
+                                    <Label/>
+
+                                    <ComboBox
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                        ItemsSource="{Binding CalculatorComboBoxes.MarginSpot}"
+                                        SelectedItem="{Binding SelectedMarginSpot}">
+
+                                    </ComboBox>
+                                    <Label/>
+
+                                    <ComboBox
+                                        Width="{StaticResource CalculatorElementsWidth}"
+                                        ItemsSource="{Binding CalculatorComboBoxes.DecimalPlaces}"
+                                        SelectedItem="{Binding SelectedDecimalPlaces}">
+
+                                    </ComboBox>
+                                    <Label/>
+                                    <Button 
+                                        Width="{StaticResource CalculatorElementsWidth}"
+                                        Background="DeepSkyBlue"
+                                        Command="{Binding OpenRaiseOrdersModalCommand}"
+                                        CommandParameter="{Binding ElementName=Modal}">
+                                        Raise Order
+                                    </Button>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0, 20, 0, 0">
+
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Initial Entry"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Limit"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Initial Stop"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Entry Size"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Entry Quantity"/>
+
+                                </WrapPanel>
+
+                                <WrapPanel>
+
+                                    <TextBox 
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="{Binding InitialEntry, UpdateSourceTrigger=PropertyChanged}"
+                                    Padding="4"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Padding="4"
+                                    Text="{Binding Limit}"
+                                    />
+                                    <Label/>
+
+                                    <TextBox
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Padding="4"
+                                    Text="{Binding InitialStop, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBox
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Padding="4"
+                                    Text="{Binding EntrySize, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBox
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Padding="4"
+                                    Text="{Binding EntryQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0, 20, 0, 0">
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="1-1 Profit"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Pos in %"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Account % Pos"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Best Target"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="OCO Quantity"/>
+                                </WrapPanel>
+
+                                <WrapPanel>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding OneToOneProfit, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding PosPerc, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding AccountPercPos, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding BestTarget, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding OCOQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0, 20, 0, 0">
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Loss"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Pos. Loss %"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Account % Loss"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Worst Target"/>
+
+                                    <Label/>
+                                    <TextBlock
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Text="Stop Quantity"/>
+                                </WrapPanel>
+
+                                <WrapPanel>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding CalculatorElements.Loss}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding CalculatorElements.PosLossPerc}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding CalculatorElements.AccountPercLoss}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}" 
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding WorstTarget, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label/>
+
+                                    <TextBlock
+                                    Height="{StaticResource CalculatorElementsHeight}"
+                                    Width="{StaticResource CalculatorElementsWidth}"
+                                    Style="{StaticResource CalculatorTextBlock}"
+                                    Padding="4"
+                                    Text="{Binding CalculatorElements.StopQuantity}"/>
+
+                                </WrapPanel>
+
+                            </StackPanel>
+
+                            <StackPanel MaxWidth="500" HorizontalAlignment="Right">
+                                <TextBlock Margin="125, 0, 0, 0">Calculator Setup</TextBlock>
+
+                                <StackPanel Margin="20, 0, 0, 0">
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Account Size $</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                            Text="{Binding TradeAccountSize, UpdateSourceTrigger=PropertyChanged}"
+                                            Height="{StaticResource CalculatorElementsHeight}"
+                                            Width="{StaticResource CalculatorElementsWidth}" 
+                                            Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Account Size BTC</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}" 
+                                        Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Account Risk in %</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                        Text="{Binding AccountRiskInPerc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}" 
+                                        Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Amount Risk in $</TextBlock>
+                                        <Label/>
+                                        <TextBlock
+                                        Text="{Binding AmountRiskInDollars, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}" 
+                                        Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Exchange Pos. Size Limit %</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                        Text="{Binding ExchangePosSizeLimitInPerc}"
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}" 
+                                        Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Acceptable Slippage %</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}"
+                                        Text="{Binding AcceptableSlippacePerc, UpdateSourceTrigger=PropertyChanged}"
+                                        Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Scale out %</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                        Text="{Binding ScaleOut, UpdateSourceTrigger=PropertyChanged}"
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}" 
+                                        Padding="4"/>
+                                    </WrapPanel>
+
+                                    <WrapPanel>
+                                        <TextBlock Width="{StaticResource CalculatorSetupElementsWidth}">Trade Fee % (4x)</TextBlock>
+                                        <Label/>
+                                        <TextBox
+                                        Text="{Binding TradeFees}"
+                                        Height="{StaticResource CalculatorElementsHeight}"
+                                        Width="{StaticResource CalculatorElementsWidth}" 
+                                        Padding="4"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </WrapPanel>
+                    </TabItem>
+
+                </TabControl>
+            </StackPanel>
+
+
+            <TextBlock
+                HorizontalAlignment="Right"
+                Margin="0 5 10 0"
+                Grid.Column="2"
+                Grid.Row="4" 
+                Text="{Binding Status}"
+                FontSize="12"
+                />
+        </Grid>
+    </Border>
+</Window>

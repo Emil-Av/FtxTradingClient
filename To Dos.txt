@@ -1,0 +1,5 @@
+Things that are still opened:
+1. Candle closing and opening a new one
+2. Some discrepancies between the actual chart data and my chart data --> look at 5M
+3. Weekly and Monthly charts not accurate
+4. Dispatcher exception [done]

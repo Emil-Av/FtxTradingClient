@@ -1,0 +1,48 @@
+﻿<Application x:Class="FTXTradingClient.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:FTXTradingClient"
+             StartupUri="Views/TickerView.xaml">
+    <Application.Resources>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#3A4149"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="BorderBrush" Value="#282D33"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="DarkCyan"/>
+        </Style>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+            <Setter Property="BorderThickness" Value="0.2"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#282D33"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="3, 0, 2, 0"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="#3A4149"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="CalculatorTextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Background" Value="#3A4149"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+
+    </Application.Resources>
+</Application>
