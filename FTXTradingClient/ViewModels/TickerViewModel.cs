@@ -36,7 +36,7 @@ namespace FTXTradingClient.ViewModel
         // action for the web socket
         public Action OnWebSocketConnect;
 
-        public Client client { get; set; }  = new Client("", "");
+        public Client client { get; set; } = new Client("nBUxZ0spCcHVNb4NNUQF7FZ-S4R2orM1ZjogeMZ-", "LuFUdRpvQcW82i_y31mdeJ_sSdJutzvKBFZf4X9u");
         public FtxRestApi api { get; set; } 
 
 
