@@ -260,25 +260,10 @@
 
                     </TabItem>
 
-                    <TabItem Header="Open Orders">
-
-                    </TabItem>
-
-                    <TabItem Header="Active Trades">
-
-                    </TabItem>
-
                     <TabItem Header="Calculator">
                         <WrapPanel MinWidth="500">
                             <StackPanel Margin="2, 0, 0, 0">
                                 <WrapPanel>
-                                    <Popup 
-                                        MinWidth="{StaticResource CalculatorElementsWidth}"
-                                        Height="{StaticResource CalculatorElementsHeight}"
-                                        ToolTip="Hi"
-                                        IsOpen="{Binding IsOpenPopUp}">
-                                        <TextBlock Foreground="Red" FontSize="13" Text="Stop must be greater than Entry for Short"/>
-                                    </Popup>
                                     <WrapPanel Margin="0, 2, 0, 0" >
                                         <TextBlock
                                             Margin="0, 0, 3, 0"

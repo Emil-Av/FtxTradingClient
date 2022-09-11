@@ -258,9 +258,9 @@ namespace FTXTradingClient.FTX
 
             var body =
                 $"{{\"market\": \"{instrument}\"," +
-                $"\"side\": \"{side.ToString()}\"," +
+                $"\"side\": \"{side}\"," +
                 $"\"price\": {price}," +
-                $"\"type\": \"{orderType.ToString()}\"," +
+                $"\"type\": \"{orderType}\"," +
                 $"\"size\": {amount}," +
                 $"\"reduceOnly\": {reduceOnly.ToString().ToLower()}}}";
 
@@ -270,14 +270,33 @@ namespace FTXTradingClient.FTX
             return ParseResponce(result);
         }
 
-        public async Task<dynamic> PlaceStopOrderAsync(string instrument, SideType side, decimal triggerPrice, decimal amount, bool reduceOnly = false)
+        public async Task<dynamic> PlaceStopOrderAsync(string instrument, SideType side, decimal amount, decimal triggerPrice, decimal OrderPrice, bool reduceOnly = false)
         {
             var path = $"api/conditional_orders";
 
             var body =
                 $"{{\"market\": \"{instrument}\"," +
-                $"\"side\": \"{side.ToString()}\"," +
+                $"\"side\": \"{side}\"," +
                 $"\"triggerPrice\": {triggerPrice}," +
+                $"\"type\": \"stop\"," +
+                $"\"size\": {amount}," +
+                $"\"reduceOnly\": {reduceOnly.ToString().ToLower()}, " + 
+                $"\"orderPrice\" : {OrderPrice}}}";
+
+            var sign = GenerateSignature(HttpMethod.Post, "/api/conditional_orders", body);
+            var result = await CallAsyncSign(HttpMethod.Post, path, sign, body);
+
+            return ParseResponce(result);
+        }
+
+        public async Task<dynamic> PlaceStopOrderAsync(string instrument, SideType side, decimal amount, decimal OrderPrice, bool reduceOnly = false)
+        {
+            var path = $"api/conditional_orders";
+
+            var body =
+                $"{{\"market\": \"{instrument}\"," +
+                $"\"side\": \"{side}\"," +
+                $"\"triggerPrice\": {OrderPrice}," +
                 $"\"type\": \"stop\"," +
                 $"\"size\": {amount}," +
                 $"\"reduceOnly\": {reduceOnly.ToString().ToLower()}}}";
@@ -288,13 +307,31 @@ namespace FTXTradingClient.FTX
             return ParseResponce(result);
         }
 
+        //public async Task<dynamic> PlaceStopOrderAsync(string instrument, SideType side, decimal triggerPrice, decimal amount, bool reduceOnly = false)
+        //{
+        //    var path = $"api/conditional_orders";
+
+        //    var body =
+        //        $"{{\"market\": \"{instrument}\"," +
+        //        $"\"side\": \"{side.ToString()}\"," +
+        //        $"\"triggerPrice\": {triggerPrice}," +
+        //        $"\"type\": \"stop\"," +
+        //        $"\"size\": {amount}," +
+        //        $"\"reduceOnly\": {reduceOnly.ToString().ToLower()}}}";
+
+        //    var sign = GenerateSignature(HttpMethod.Post, "/api/conditional_orders", body);
+        //    var result = await CallAsyncSign(HttpMethod.Post, path, sign, body);
+
+        //    return ParseResponce(result);
+        //}
+
         public async Task<dynamic> PlaceTrailingStopOrderAsync(string instrument, SideType side, decimal trailValue, decimal amount, bool reduceOnly = false)
         {
             var path = $"api/conditional_orders";
 
             var body =
                 $"{{\"market\": \"{instrument}\"," +
-                $"\"side\": \"{side.ToString()}\"," +
+                $"\"side\": \"{side}\"," +
                 $"\"trailValue\": {trailValue}," +
                 $"\"type\": \"trailingStop\"," +
                 $"\"size\": {amount}," +
@@ -312,7 +349,7 @@ namespace FTXTradingClient.FTX
 
             var body =
                 $"{{\"market\": \"{instrument}\"," +
-                $"\"side\": \"{side.ToString()}\"," +
+                $"\"side\": \"{side}\"," +
                 $"\"triggerPrice\": {triggerPrice}," +
                 $"\"type\": \"takeProfit\"," +
                 $"\"size\": {amount}," +

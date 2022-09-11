@@ -155,6 +155,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\PlaceOrderResponse.cs" />
     <Compile Include="Themes\Modal.cs" />
     <Compile Include="FTX\Client.cs" />
     <Compile Include="FTX\Enums\OrderType.cs" />
