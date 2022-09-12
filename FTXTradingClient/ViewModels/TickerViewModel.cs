@@ -203,6 +203,8 @@ namespace FTXTradingClient.ViewModel
 
         public MouseLeftButtonDownCommand MouseLeftButtonDownCommand { get; set; }
 
+        public AllowFocusCommand AllowFocusCommand { get; set; }
+
         public OpenRaiseOrdersModalCommand OpenRaiseOrdersModalCommand { get; set; }
 
         public CloseRaiseOrdersModalCommand CloseRaiseOrdersModalCommand { get; set; }
@@ -677,6 +679,7 @@ namespace FTXTradingClient.ViewModel
             Tickers = new ObservableCollection<TickersModel>();
             ChangeTimeFrameCommand = new ChangeTimeFrameCommand(this);
             MouseLeftButtonDownCommand = new MouseLeftButtonDownCommand(this);
+            AllowFocusCommand = new AllowFocusCommand(this);
             CalculatorComboBoxes = new CalculatorComboBoxes();
             OpenRaiseOrdersModalCommand = new OpenRaiseOrdersModalCommand();
             CloseRaiseOrdersModalCommand = new CloseRaiseOrdersModalCommand();
